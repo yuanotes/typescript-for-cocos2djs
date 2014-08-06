@@ -31740,13 +31740,14 @@ var TypeScript;
                 this.writeLineToOutput("function " + classDecl.identifier.text() + "() {");
                 this.recordSourceMappingNameStart("constructor");
 
-                /** Modified by yuan. Donot generate _super in constructor method automatically.
                 if (hasBaseClass) {
                     this.emitIndent();
-                    this.writeToOutputWithSourceMapRecord("_super.apply(this, arguments)", baseTypeReference);
+                    /** Modified by yuan. **/
+                    //this.writeToOutputWithSourceMapRecord("_super.apply(this, arguments)", baseTypeReference);
+                    this.writeToOutputWithSourceMapRecord("if(_super.__ts){_super.apply(this, arguments)}else{_super.prototype.ctor.apply(this, arguments)}", baseTypeReference);
+                    /** End modified. **/
                     this.writeLineToOutput(";");
                 }
-                **/
 
                 if (this.shouldCaptureThis(classDecl)) {
                     this.writeCaptureThisStatement(classDecl);
