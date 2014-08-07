@@ -69,6 +69,20 @@ declare module cc {
         static load(fileName: string, owner?: Object, parentSize?: Size);
     }
 
+    class BuilderAnimationManager {
+        getRunningSequenceName(): string;
+        runAnimationsForSequenceNamed(seq: string);
+        setCompletedAnimationCallback(obj: Object, func: Function);
+        getLastCompletedSequenceName(): string;
+    }
+
+    class CallFunc {
+        static create(func: Function, _this?: Object);
+    }
+    class EaseExponentialOut {
+        static create(action: Action);
+    }
+
     function pSub(p1: Point, p2: Point): Point;
     function pAdd(p1: Point, p2: Point): Point;
 
@@ -1121,7 +1135,11 @@ declare module cc {
     export class Node extends Class {
         x: number;
         y: number;
+        animationManager: BuilderAnimationManager;
+
         attr(props: Object);
+        setZOrder(order: number);
+
         /**
          * set the dirty node
          */
@@ -1261,8 +1279,7 @@ declare module cc {
          * @param {cc.Point|Number} newPosOrxValue
          * @param {Number}  yValue
          */
-        setPosition(newPos: Point);
-        setPosition(xValue: number, yValue: number);
+        setPosition(newPosOrxValue: any, yValue?: number);
 
         /**
          * <p>Position (x,y) of the node in OpenGL coordinates. (0,0) is the left-bottom corner. </p>
@@ -1328,6 +1345,7 @@ declare module cc {
          * @param {cc.Point} point
          */
         setAnchorPoint(point: Point);
+        setAnchorPoint(x: number, y: number);
 
         /**
          *  The anchorPoint in absolute pixels.  <br/>
@@ -1347,6 +1365,7 @@ declare module cc {
          * @param {cc.Size} size
          */
         setContentSize(size: Size);
+        setContentSize(width: number, height: number);
 
         /**
          * whether or not the node is running
@@ -1497,7 +1516,7 @@ declare module cc {
          * If the node orphan, then nothing happens.
          * @param {Boolean} cleanup
          */
-        removeFromParent(cleanup: boolean);
+        removeFromParent(cleanup?: boolean);
 
         /**
          * Remove itself from its parent node.
@@ -2094,6 +2113,11 @@ declare module cc {
          */
         static create(label: string, fontName?: string, fontSize?: number, dimensions?: Size, alignment?: number): LabelTTF;
         static create(label: string);
+
+        setString(str: string);
+    }
+    export class LabelBMFont extends Sprite {
+        setString(str: string);
     }
     //#endregion cocos2d/label_nodes/CCLabelTTF.js
 
@@ -3311,6 +3335,7 @@ declare module cc {
 
     //#region cocos2d/platform/CCClass.js
     export class Class {
+        rootNode: cc.Node;
     }
     //#endregion cocos2d/platform/CCClass.js
 
@@ -3927,6 +3952,7 @@ declare module cc {
          * var sprite2 = cc.Sprite.create("HelloHTML5World.png",cc.rect(0,0,480,320));
          */
         static create(fileName: string, rect?: Rect): Sprite;
+        static createWithSpriteFrameName(spriteFrameName: string): Sprite;
     }
     //#endregion cocos2d/sprite_nodes/CCSprite.js
 

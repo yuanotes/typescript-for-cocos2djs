@@ -30091,7 +30091,7 @@ var TypeScript;
                      * Call _super.prototype.ctor() if the base is from Cocos2d-JS,
                      * otherwise call _super.call() and it should come from typescript.
                      **/
-                    this.writeToOutput("(function(){if(_super.__ts){return function(_this){_super.apply(_this,Array.prototype.slice.call(arguments,1));}}else{return function(_this){_super.prototype.ctor.apply(_this,Array.prototype.slice.call(arguments,1));}}}())");
+                    this.writeToOutput("(function(){if(_super.__ts){return function(_this){_super.apply(_this,Array.prototype.slice.call(arguments,1));}}else if(typeof _super.prototype.ctor===\"function\"){return function(_this){_super.prototype.ctor.apply(_this,Array.prototype.slice.call(arguments,1));}}}())");
                 } else {
                     this.emitJavascript(target, false);
                 }
@@ -31744,7 +31744,7 @@ var TypeScript;
                     this.emitIndent();
                     /** Modified by yuan. **/
                     //this.writeToOutputWithSourceMapRecord("_super.apply(this, arguments)", baseTypeReference);
-                    this.writeToOutputWithSourceMapRecord("if(_super.__ts){_super.apply(this, arguments)}else{_super.prototype.ctor.apply(this, arguments)}", baseTypeReference);
+                    this.writeToOutputWithSourceMapRecord("if(_super.__ts){_super.apply(this, arguments)}else if(typeof _super.prototype.ctor===\"function\"){_super.prototype.ctor.apply(this, arguments)}", baseTypeReference);
                     /** End modified. **/
                     this.writeLineToOutput(";");
                 }
