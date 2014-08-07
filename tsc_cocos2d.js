@@ -30091,7 +30091,19 @@ var TypeScript;
                      * Call _super.prototype.ctor() if the base is from Cocos2d-JS,
                      * otherwise call _super.call() and it should come from typescript.
                      **/
-                    this.writeToOutput("(function(){if(_super.__ts){return function(_this){_super.apply(_this,Array.prototype.slice.call(arguments,1));}}else if(typeof _super.prototype.ctor===\"function\"){return function(_this){_super.prototype.ctor.apply(_this,Array.prototype.slice.call(arguments,1));}}}())");
+                    this.writeLineToOutput("(function(){");
+                    this.writeLineToOutput("    if(_super.__ts){");
+                    this.writeLineToOutput("        return function(_this){");
+                    this.writeLineToOutput("            _super.apply(_this, Array.prototype.slice.call(arguments,1));");
+                    this.writeLineToOutput("        }");
+                    this.writeLineToOutput("    } else if (typeof _super.prototype.ctor === \"function\") {");
+                    this.writeLineToOutput("        return function(_this){");
+                    this.writeLineToOutput("            _super.prototype.ctor.apply(_this, Array.prototype.slice.call(arguments,1));");
+                    this.writeLineToOutput("        }");
+                    this.writeLineToOutput("    } else {");
+                    this.writeLineToOutput("        return function(){};");
+                    this.writeLineToOutput("    }");
+                    this.writeToOutput("}())");
                 } else {
                     this.emitJavascript(target, false);
                 }
