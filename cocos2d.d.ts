@@ -573,6 +573,7 @@ declare module cc {
      * @extends cc.Class
      */
     export class Action extends Class {
+        clone(): Action;
     }
 
     /**
@@ -1136,6 +1137,7 @@ declare module cc {
         x: number;
         y: number;
         animationManager: BuilderAnimationManager;
+        controller: any;
 
         attr(props: Object);
         setZOrder(order: number);
@@ -1957,7 +1959,10 @@ declare module cc {
         origin: Point;
         size: Size;
 
+        x: number;
+        y: number;
         width: number;
+        height: number;
 
         constructor(x1: number, y1: number, width1: number, height1: number);
     }
@@ -3951,6 +3956,8 @@ declare module cc {
          * //create a sprite with filename and rect
          * var sprite2 = cc.Sprite.create("HelloHTML5World.png",cc.rect(0,0,480,320));
          */
+        setOpacity(opacity: number);
+        init(name: string);
         static create(fileName: string, rect?: Rect): Sprite;
         static createWithSpriteFrameName(spriteFrameName: string): Sprite;
     }
