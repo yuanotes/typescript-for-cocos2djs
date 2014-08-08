@@ -717,6 +717,7 @@ declare module cc {
          * var actionBy = cc.RotateBy.create(2, 360);
          */
         static create(duration: number, deltaAngleX: number, deltaAngleY: number): RotateBy;
+        static create(duration: number, angle: number): RotateBy;
     }
 
     /** Moves a cc.Node object to the position x,y. x and y are absolute coordinates by modifying it's position attribute.
@@ -3956,9 +3957,10 @@ declare module cc {
          * //create a sprite with filename and rect
          * var sprite2 = cc.Sprite.create("HelloHTML5World.png",cc.rect(0,0,480,320));
          */
-        setOpacity(opacity: number);
-        init(name: string);
         static create(fileName: string, rect?: Rect): Sprite;
+        setOpacity(opacity: number);
+        getOpacity():number;
+        init(name: string);
         static createWithSpriteFrameName(spriteFrameName: string): Sprite;
     }
     //#endregion cocos2d/sprite_nodes/CCSprite.js
