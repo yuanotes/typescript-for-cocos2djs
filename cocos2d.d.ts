@@ -1698,13 +1698,13 @@ declare module cc {
          * @param {cc.Class} callback_fn
          * @param {Number} delay
          */
-        scheduleOnce(callback_fn: (dt: number) => void , delay: number);
+        scheduleOnce(callback_fn: (dt?: number) => void , delay: number);
 
         /**
          * unschedules a custom callback function.
          * @param {function} callback_fn
          */
-        unschedule(callback_fn: (dt: number) => void );
+        unschedule(callback_fn: (dt?: number) => void );
 
         /**
          * unschedule all scheduled callback functions: custom callback functions, and the 'update' callback function.<br/>
