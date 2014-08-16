@@ -567,6 +567,9 @@ declare module cc {
      * cc.Director.getInstance().getScheduler().scheduleSelector(selector, this, interval, !this._isRunning);
      */
     export class Scheduler extends Class {
+        setTimeScale(scale: number);
+        performFunctionInCocosThread(func: Function);
+        getTimeScale(): number;
     }
     //#endregion cocos2d/CCScheduler.js
 
@@ -1063,6 +1066,18 @@ declare module cc {
 
     //#region cocos2d/actions/CCActionManager.js
     export class ActionManager extends Class {
+        getActionByTag();
+        removeActionByTag();
+        removeAllActions();
+        addAction();
+        resumeTarget();
+        update(dt:number);
+        getNumberOfRunningActionsInTarget();
+        removeAllActionsFromTarget();
+        resumeTargets();
+        removeAction();
+        pauseTarget();
+        pauseAllRunningActions();
     }
 
     /**
@@ -1736,6 +1751,13 @@ declare module cc {
          * @param {Number} interval
          */
         schedule(callback_fn:(dt:number) => void, interval?:number, repeat?:boolean, delay?:number);
+
+        /**
+         * NOTE: this is no implemented in cocos2d-js public repository.
+         * Schedule the action manager with scheduler.
+         * It is always done in director.
+         */
+        scheduleActionManagerUpdate();
 
         /**
          * Schedules a callback function that runs only once, with a delay of 0 or larger
