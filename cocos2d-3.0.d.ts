@@ -501,7 +501,7 @@ declare module cc {
          */
         drawCardinalSpline(config:Point[], tension:number, segments:number);
 
-        // FIXME: Typescript doesn't support abstract classes so we have to put the common    
+        // FIXME: Typescript doesn't support abstract classes so we have to put the common
         // methods from DrawingPrimitiveCanvas and DrawingPrimitiveWebGL here for convenience
 
         /**
