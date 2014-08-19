@@ -35,6 +35,23 @@ declare module cc {
     var director:cc.Director;
     var winSize:cc.Size;
     var view:GLView;
+
+    var _RENDER_TYPE_CANVAS : number;
+    var _RENDER_TYPE_WEBGL : number;
+
+    var eventManager: {
+        addListener: Function;
+    };
+
+    class EventListener extends Class {
+        static UNKNOWN:number;
+        static  TOUCH_ONE_BY_ONE:number;
+        static  TOUCH_ALL_AT_ONCE:number;
+        static  KEYBOARD:number;
+        static  MOUSE:number;
+        static  ACCELERATION:number;
+        static  CUSTOM:number;
+    }
     enum ResolutionPolicy {
         // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
         // Distortion can occur, and the application may appear stretched or compressed.
@@ -98,7 +115,7 @@ declare module cc {
     class BuilderReader {
         static load(fileName:string, owner?:Object, parentSize?:Size);
     }
-    
+
 
     class BuilderAnimationManager {
         getRunningSequenceName():string;
@@ -4371,7 +4388,17 @@ declare module cc {
 
         // restarts the JS VM
         function restartVM();
+
+        var capabilities: {
+            "opengl": boolean;
+            "accelerometer" : boolean;
+            "touches" : boolean;
+            "keyboard": boolean;
+            "mouse": boolean;
+        }
     }
+
+
 }
 
 declare module cc {
