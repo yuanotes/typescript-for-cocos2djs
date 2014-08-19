@@ -64,19 +64,85 @@ declare module cc {
         setDesignResolutionSize(width:number, height:number, resolutionPolicy:ResolutionPolicy);
     }
 
-
+    class ScrollView {
+        isClippingToBounds();
+        setContainer(node: cc.Node);
+        setContentOffsetInDuration();
+        setZoomScaleInDuration();
+        setBounceable();
+        getDirection();
+        getContainer();
+        updateTweenAction();
+        getZoomScale();
+        updateInset();
+        initWithViewSize();
+        pause();
+        setDirection();
+        init();
+        setContentOffset();
+        isDragging();
+        isTouchEnabled();
+        isBounceable();
+        setTouchEnabled();
+        getContentOffset();
+        resume();
+        setClippingToBounds();
+        setViewSize();
+        getViewSize();
+        maxContainerOffset();
+        isTouchMoved();
+        isNodeVisible();
+        minContainerOffset();
+        setZoomScale();
+    }
     class BuilderReader {
         static load(fileName:string, owner?:Object, parentSize?:Size);
     }
+    
 
     class BuilderAnimationManager {
         getRunningSequenceName():string;
 
-        runAnimationsForSequenceNamed(seq:string);
+        runAnimationsForSequenceNamed(seq:string, reset?:boolean);
 
         setCompletedAnimationCallback(obj:Object, func:Function);
 
         getLastCompletedSequenceName():string;
+        moveAnimationsFromNode();
+        setAutoPlaySequenceId();
+        getDocumentCallbackNames();
+        actionForSoundChannel();
+        setBaseValue();
+        getDocumentOutletNodes();
+        setRootNode();
+        runAnimationsForSequenceNamedTweenDuration();
+        addDocumentOutletName();
+        getRootContainerSize();
+        setDocumentControllerName();
+        setObject();
+        getContainerSize();
+        actionForCallbackChannel();
+        getDocumentOutletNames();
+        addDocumentCallbackControlEvents();
+        init();
+        getKeyframeCallbacks();
+        getDocumentCallbackControlEvents();
+        setRootContainerSize();
+        runAnimationsForSequenceIdTweenDuration();
+        getAutoPlaySequenceId();
+        addDocumentCallbackName();
+        getRootNode();
+        addDocumentOutletNode();
+        setDelegate();
+        getSequenceDuration(seq: string): number;
+        addDocumentCallbackNode();
+        runAnimationsForSequenceNamed();
+        getSequenceId();
+        setCallFunc();
+        getDocumentCallbackNodes();
+        setSequences();
+        debug();
+        getDocumentControllerName();
     }
 
     class CallFunc {
@@ -581,6 +647,18 @@ declare module cc {
      */
     export class Action extends Class {
         clone():Action;
+        startWithTarget(target: cc.Node);
+        setOriginalTarget(target: cc.Node);
+        getOriginalTarget(): cc.Node;
+        stop();
+        update(dt: number);
+        getTarget(): cc.Node;
+        step(dt: number);
+        setTag(tag: number);
+        getTag(): number;
+        setTarget(target: cc.Node);
+        isDone(): boolean;
+        reverse();
     }
 
     /**
@@ -1072,7 +1150,7 @@ declare module cc {
         addAction();
         resumeTarget();
         update(dt:number);
-        getNumberOfRunningActionsInTarget();
+        getNumberOfRunningActionsInTarget(target : cc.Node);
         removeAllActionsFromTarget();
         resumeTargets();
         removeAction();
@@ -1983,6 +2061,7 @@ declare module cc {
      */
     function p(x:number, y:number):Point;
 
+
     function _p(x:number, y:number):Point;
 
     /**
@@ -2029,8 +2108,6 @@ declare module cc {
         y:number;
         width:number;
         height:number;
-
-        constructor(x1:number, y1:number, width1:number, height1:number);
     }
 
     /**
