@@ -32,9 +32,22 @@
  */
 declare function require(name:string);
 declare module cc {
-    var director:cc.Director;
+    var director: Director;
     var winSize:cc.Size;
     var view:GLView;
+    var SCROLLVIEW_DIRECTION_NONE : number;
+    var SCROLLVIEW_DIRECTION_HORIZONTAL : number;
+    var SCROLLVIEW_DIRECTION_VERTICAL : number;
+    var SCROLLVIEW_DIRECTION_BOTH : number;
+    var TABLEVIEW_FILL_TOPDOWN : number;
+    var TABLEVIEW_FILL_BOTTOMUP : number;
+
+    var CONTROL_STATE_NORMAL : number;
+    var CONTROL_STATE_HIGHLIGHTED : number;
+    var CONTROL_STATE_DISABLED : number;
+    var CONTROL_STATE_SELECTED : number;
+    var CONTROL_STATE_INITIAL : number;
+
     enum ResolutionPolicy {
         // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
         // Distortion can occur, and the application may appear stretched or compressed.
@@ -64,7 +77,7 @@ declare module cc {
         setDesignResolutionSize(width:number, height:number, resolutionPolicy:ResolutionPolicy);
     }
 
-    class ScrollView {
+    class ScrollView extends Layer {
         isClippingToBounds();
         setContainer(node: cc.Node);
         setContentOffsetInDuration();
@@ -75,25 +88,47 @@ declare module cc {
         updateTweenAction();
         getZoomScale();
         updateInset();
-        initWithViewSize();
+        initWithViewSize(size: Size);
         pause();
-        setDirection();
+        setDirection(d: number);
         init();
-        setContentOffset();
+        setContentOffset(offset: cc.Point, animate?: boolean);
         isDragging();
         isTouchEnabled();
         isBounceable();
-        setTouchEnabled();
-        getContentOffset();
+        setTouchEnabled(bool: boolean);
+        getContentOffset() : cc.Point;
         resume();
         setClippingToBounds();
-        setViewSize();
-        getViewSize();
+        setViewSize(size: cc.Size);
+        getViewSize(): cc.Size;
         maxContainerOffset();
         isTouchMoved();
         isNodeVisible();
         minContainerOffset();
         setZoomScale();
+        static create(size?: Size, container?: Node);
+    }
+    class TableView extends ScrollView {
+        updateCellAtIndex(idx: number);
+        setVerticalFillOrder(order: number);
+        scrollViewDidZoom();
+        _updateContentSize();
+        getVerticalFillOrder();
+        removeCellAtIndex();
+        scrollViewDidScroll();
+        reloadData();
+        insertCellAtIndex();
+        cellAtIndex(idx: number) : TableViewCell;
+        dequeueCell();
+        setDelegate(delegate: any);
+        setDataSource(dataSource: Object);
+        static create(dataSource?: Object, size?: Size, container?: Node);
+    }
+    class TableViewCell extends Node {
+        reset();
+        getIdx() : number;
+        setIdx(idx: number);
     }
     class BuilderReader {
         static load(fileName:string, owner?:Object, parentSize?:Size);
@@ -108,8 +143,8 @@ declare module cc {
         setCompletedAnimationCallback(obj:Object, func:Function);
 
         getLastCompletedSequenceName():string;
-        moveAnimationsFromNode();
-        setAutoPlaySequenceId();
+        moveAnimationsFromNode(fromNode: cc.Node, toNode: cc.Node);
+        setAutoPlaySequenceId(id: number);
         getDocumentCallbackNames();
         actionForSoundChannel();
         setBaseValue();
@@ -137,7 +172,7 @@ declare module cc {
         getSequenceDuration(seq: string): number;
         addDocumentCallbackNode();
         runAnimationsForSequenceNamed();
-        getSequenceId();
+        getSequenceId(seq: string) : number;
         setCallFunc();
         getDocumentCallbackNodes();
         setSequences();
@@ -145,10 +180,116 @@ declare module cc {
         getDocumentControllerName();
     }
 
+    export class SpriteFrame {
+        clone();
+        setRotated();
+        setTexture();
+        getOffset();
+        setRectInPixels();
+        getTexture() : Texture2D;
+        getRect() : Rect;
+        setOffsetInPixels();
+        getRectInPixels();
+        setOriginalSize();
+        getOriginalSizeInPixels();
+        setOriginalSizeInPixels();
+        setOffset();
+        initWithTexture();
+        isRotated();
+        initWithTextureFilename();
+        setRect();
+        getOffsetInPixels();
+        getOriginalSize();
+        static create(fileName: string, rect: Rect, rotated?: boolean, offset?: Point, originalSize?: Size) : SpriteFrame;
+        static createWithTexture(texture: Texture2D, rect: Rect, rotated?:boolean, offset?: Point, originalSize?:Size) : SpriteFrame;
+    }
+
+    class Scale9Sprite extends Node {
+        resizableSpriteWithCapInsets();
+        setInsetBottom();
+        initWithSpriteFrameName();
+        setInsetTop();
+        init();
+        setPreferredSize();
+        setSpriteFrame();
+        initWithBatchNode();
+        getInsetBottom();
+        getCapInsets();
+        updateWithBatchNode();
+        getInsetRight();
+        getOriginalSize();
+        initWithFile();
+        getInsetTop();
+        setInsetLeft();
+        initWithSpriteFrame();
+        getPreferredSize();
+        setCapInsets();
+        getInsetLeft();
+        setInsetRight();
+
+        static create(): Scale9Sprite;
+        static createWithSpriteFrameName(name: string) : Scale9Sprite;
+        static createWithSpriteFrame(spFrame: SpriteFrame) : Scale9Sprite;
+    }
+
+    class Texture2D {
+        getMaxT();
+        getStringForFormat();
+        initWithImage();
+        getMaxS();
+        releaseGLTexture();
+        hasPremultipliedAlpha();
+        initWithMipmaps();
+        getPixelsHigh();
+        getBitsPerPixelForFormat();
+        getName();
+        initWithString();
+        setMaxT();
+        drawInRect();
+        getContentSize() : Size;
+        setAliasTexParameters();
+        setAntiAliasTexParameters();
+        generateMipmap();
+        getDescription();
+        getPixelFormat();
+        setGLProgram();
+        getContentSizeInPixels();
+        getPixelsWide();
+        drawAtPoint();
+        getGLProgram();
+        hasMipmaps();
+        setMaxS();
+
+        static setDefaultAlphaPixelFormat();
+        static getDefaultAlphaPixelFormat();
+        static PVRImagesHavePremultipliedAlpha();
+    }
+
+    class TextureCache {
+        reloadTexture();
+        unbindAllImageAsync();
+        removeTextureForKey();
+        removeAllTextures();
+        addImageAsync();
+        getDescription();
+        getCachedTextureInfo();
+        addImage(fileName: string) : Texture2D;
+        unbindImageAsync();
+        getTextureForKey();
+        removeUnusedTextures();
+        removeTexture();
+        waitForQuit();
+    }
     class CallFunc {
         static create(func:Function, _this?:Object);
     }
     class EaseExponentialOut {
+        static create(action:Action);
+    }
+    class EaseBackOut {
+        static create(action:Action);
+    }
+    class EaseBackIn {
         static create(action:Action);
     }
 
@@ -364,6 +505,8 @@ declare module cc {
          * @param {Number} value
          */
         setAnimationInterval(value:number);
+
+        getTextureCache(): TextureCache;
     }
     //#endregion cocos2d/CCDirector.js
 
@@ -436,9 +579,9 @@ declare module cc {
          * draws a solid rectangle given the origin and destination point measured in points.
          * @param {cc.Point} origin
          * @param {cc.Point} destination
-         * @param {cc.Color4F} color
+         * @param {cc.Color} color
          */
-        drawSolidRect(origin:Point, destination:Point, color:Color4F);
+        drawSolidRect(origin:Point, destination:Point, color:Color);
 
         /**
          * draws a poligon given a pointer to cc.Point coordiantes and the number of vertices measured in points.
@@ -453,9 +596,9 @@ declare module cc {
          * draws a solid polygon given a pointer to CGPoint coordiantes, the number of vertices measured in points, and a color.
          * @param {Array} poli
          * @param {Number} numberOfPoints
-         * @param {cc.Color4F} color
+         * @param {cc.Color} color
          */
-        drawSolidPoly(poli:Point[], numberOfPoints:number, color:Color4F);
+        drawSolidPoly(poli:Point[], numberOfPoints:number, color:Color);
 
         /**
          * draws a circle given the center, radius and number of segments.
@@ -511,7 +654,7 @@ declare module cc {
          * @param {Number} r blue value (0 to 255)
          * @param {Number} a Alpha value (0 to 255)
          */
-        setDrawColor4B(r:number, g:number, b:number, a:number);
+        setDrawColor(r:number, g:number, b:number, a:number);
 
         // ENDFIXME
     }
@@ -1267,6 +1410,8 @@ declare module cc {
         controller:any;
 
         attr(props:Object);
+        getColor(): Color;
+        setColor(color: Color);
 
         /**
          * @deprecated
@@ -2267,7 +2412,19 @@ declare module cc {
         setString(str:string);
     }
     export class LabelBMFont extends Sprite {
+        setLineBreakWithoutSpace();
+        getBlendFunc();
+        isOpacityModifyRGB() : boolean;
+        getLetter();
+        getString() : string;
+        setBlendFunc();
         setString(str:string);
+        initWithString();
+        setOpacityModifyRGB(bool : boolean);
+        getFntFile();
+        setFntFile();
+        setAlignment();
+        setWidth(width: number);
     }
     //#endregion cocos2d/label_nodes/CCLabelTTF.js
 
@@ -2607,7 +2764,7 @@ declare module cc {
 
     /**
      * creates a cc.LayerColorCanvas with color, width and height in Points
-     * @param {cc.Color4B} color
+     * @param {cc.Color} color
      * @param {Number|Null} width
      * @param {Number|Null} height
      * @return {cc.LayerColor}
@@ -2622,14 +2779,14 @@ declare module cc {
      */
     export class LayerColor extends Layer {
         /**
-         * @param {cc.Color4B} color
+         * @param {cc.Color} color
          * @param {Number} width
          * @param {Number} height
          * @return {Boolean}
          */
-        init(...args:any[]/*color: Color4B, width: number, height: number*/):boolean;
+        init(...args:any[]/*color: Color, width: number, height: number*/):boolean;
 
-        static create(color?:Color4B, width?:number, height?:number):LayerColor;
+        static create(color?:Color, width?:number, height?:number):LayerColor;
     }
 
     /**
@@ -2657,35 +2814,35 @@ declare module cc {
     export class LayerGradient extends LayerColor {
         /**
          * get the starting color
-         * @return {cc.Color3B}
+         * @return {cc.Color}
          */
-        getStartColor():Color3B;
+        getStartColor():Color;
 
         /**
          * set the starting color
-         * @param {cc.Color3B} color
+         * @param {cc.Color} color
          * @example
          * // Example
          * myGradientLayer.setStartColor(cc.c3b(255,0,0));
          * //set the starting gradient to red
          */
-        setStartColor(color:Color3B);
+        setStartColor(color:Color);
 
         /**
          * set the end gradient color
-         * @param {cc.Color3B} color
+         * @param {cc.Color} color
          * @example
          * // Example
          * myGradientLayer.setEndColor(cc.c3b(255,0,0));
          * //set the ending gradient to red
          */
-        setEndColor(color:Color3B);
+        setEndColor(color:Color);
 
         /**
          * get the end color
-         * @return {cc.Color3B}
+         * @return {cc.Color}
          */
-        getEndColor():Color3B;
+        getEndColor():Color;
 
         /**
          * set starting gradient opacity
@@ -2733,12 +2890,12 @@ declare module cc {
         setCompressedInterpolation(compress:boolean);
 
         /**
-         * @param {cc.Color4B} start starting color
-         * @param {cc.Color4B} end
+         * @param {cc.Color} start starting color
+         * @param {cc.Color} end
          * @param {cc.Point|Null} v
          * @return {Boolean}
          */
-        init(start:Color4B, end:Color4B, v?:Point):boolean;
+        init(start:Color, end:Color, v?:Point):boolean;
     }
     //#endregion cocos2d/layers_scenes_transitions_nodes/CCLayer.js
 
@@ -3232,14 +3389,14 @@ declare module cc {
         setOpacity(Opacity:number);
 
         /**
-         * @return {cc.Color3B}
+         * @return {cc.Color}
          */
-        getColor():Color3B;
+        getColor():Color;
 
         /**
-         * @param {cc.Color3B} Color
+         * @param {cc.Color} Color
          */
-        setColor(Color:Color3B);
+        setColor(Color:Color);
 
         /**
          * @return {Number}
@@ -3694,128 +3851,13 @@ declare module cc {
     //#endregion cocos2d/platform/CCMacro.js
 
     //#region cocos2d/platform/CCTypes.js
-    export class Color3B {
-        r:number;
-        g:number;
-        b:number;
-
-        /**
-         * RGB color composed of bytes 3 bytes
-         * @Class
-         * @Construct
-         * @param {Number | cc.Color3B} r1 red value (0 to 255) or destination color of new color
-         * @param {Number} g1 green value (0 to 255)
-         * @param {Number} b1 blue value (0 to 255)
-         * @example
-         * //create an empty color
-         * var color1 = new cc.Color3B();
-         *
-         * //create a red color
-         * var redColor = new cc.Color3B(255,0,0);
-         *
-         * //create a new color with color
-         * var newColor = new cc.Color3B(redColor);
-         */
-        constructor(r1:any, g1?:number, b1?:number);
+    export class Color {
+        constructor(r?:number, g?:number, b?:number, a?:number);
     }
-
-    /**
-     * RGBA color composed of 4 bytes
-     * @Class
-     * @Construct
-     * @param {Number} r1 red value (0 to 255)
-     * @param {Number} g1 green value (0 to 255)
-     * @param {Number} b1 blue value (0 to 255)
-     * @param {Number} a1 Alpha value (0 to 255)
-     * @example
-     * //create a red color
-     * var redColor = new cc.Color4B(255,0,0,255);
-     */
-    export class Color4B {
-        r:number;
-        g:number;
-        b:number;
-        a:number;
-
-        constructor(r1:any, g1:number, b1:number, a1:number);
-    }
-
-    /**
-     * helper macro that creates an ccColor4B type
-     * @function
-     * @param {Number} r red value (0 to 255)
-     * @param {Number} g green value (0 to 255)
-     * @param {Number} b blue value (0 to 255)
-     * @param {Number} a Alpha value (0 to 255)
-     * @return {Number,Number,Number,Number}
-     */
-    function c4b(r:number, g:number, b:number, a:number):Color4B;
-
-    /**
-     * RGBA color composed of 4 floats
-     * @Class
-     * @Construct
-     * @param {Number} r1 red value (0 to 1)
-     * @param {Number} g1 green value (0 to 1)
-     * @param {Number} b1 blue value (0 to 1)
-     * @param {Number} a1 Alpha value (0 to 1)
-     * @example
-     * //create a red color
-     * var redColor = new cc.Color4F(1,0,0,1);
-     */
-    export class Color4F {
-        r:number;
-        g:number;
-        b:number;
-        a:number;
-
-        constructor(r1:number, g1:number, b1:number, a1:number);
-    }
-
-    /**
-     * helper macro that creates an ccColor4F type
-     * @Class
-     * @Construct
-     * @param {Number} r red value (0 to 1)
-     * @param {Number} g green value (0 to 1)
-     * @param {Number} b blue value (0 to 1)
-     * @param {Number} a Alpha value (0 to 1)
-     * @example
-     * //create a red color
-     * var redColor = cc.c4f(1,0,0,1);
-     */
-    function c4f(r:number, g:number, b:number, a:number):Color4F;
-
-    /**
-     * Returns a cc.Color4F from a cc.Color3B. Alpha will be 1.
-     * @function
-     * @param {cc.Color3B} c color
-     * @return {cc.Color4F}
-     */
-    function c4FFromccc3B(c:Color3B):Color4F;
-
-    /**
-     * Returns a cc.Color4F from a cc.Color4B.
-     * @function
-     * @param {cc.Color4B} c Color
-     * @return {cc.Color4F}
-     */
-    function c4FFromccc4B(c:Color4B):Color4F;
-
-    /**
-     * Returns a cc.Color4B from a cc.Color4F.
-     * @param {cc.Color4F} c
-     * @return {cc.Color4B}
-     */
-    function c4BFromccc4F(c:Color4F):Color4B;
-
-    /**
-     * returns YES if both cc.Color4F are equal. Otherwise it returns NO.
-     * @param {cc.Color4F} a color1
-     * @param {cc.Color4F} b color2
-     * @return {Boolean}
-     */
-    function c4FEqual(a:Color4F, b:Color4F):boolean;
+    function color(r:any, g?:number, b?:number, a?:number): Color;
+    function colorEqual(c1: Color, c2: Color): boolean;
+    function hexToColor(hex: string) : Color;
+    function colorToHex(color: Color): string;
 
     /**
      * A vertex composed of 2 floats: x, y
@@ -3894,15 +3936,15 @@ declare module cc {
      * @Class
      * @Construct
      * @param {cc.Vertex2F} pos1
-     * @param {cc.Color4B} color1
+     * @param {cc.Color} color1
      * @param {Number} size1
      */
     export class PointSprite {
         pos:Vertex2F;
-        color:Color4B;
+        color:Color;
         size:number;
 
-        constructor(pos1:Vertex2F, color1:Color4B, size1:number);
+        constructor(pos1:Vertex2F, color1:Color, size1:number);
     }
 
     /**
@@ -4088,32 +4130,47 @@ declare module cc {
      * aSprite.initWithFile("HelloHTML5World.png",cc.rect(0,0,480,320));
      */
     export class Sprite extends Node {
-        /**
-         * Create a sprite with filename and rect
-         * @constructs
-         * @param {String} fileName
-         * @param {cc.Rect} rect
-         * @return {cc.Sprite}
-         * @example
-         * //create a sprite with filename
-         * var sprite1 = cc.Sprite.create("HelloHTML5World.png");
-         *
-         * //create a sprite with filename and rect
-         * var sprite2 = cc.Sprite.create("HelloHTML5World.png",cc.rect(0,0,480,320));
-         */
-        static create(fileName?:string, rect?:Rect):Sprite;
-
-        setOpacity(opacity:number);
-
+        setOpacity(opacity : number);
         getOpacity():number;
 
         init();
-
         initWithFile(name:string);
-
+        initWithTexture(texture: Texture2D);
         initWithSpriteFrameName(name:string);
 
+        setSpriteFrame(sp: SpriteFrame);
+        setTexture(texture: Texture2D);
+        getTexture() : Texture2D;
+        setFlippedY(n: number);
+        setFlippedX(n: number);
+        getBatchNode();
+        getOffsetPosition();
+        removeAllChildrenWithCleanup();
+        updateTransform();
+        setTextureRect();
+        isFrameDisplayed();
+        getAtlasIndex();
+        setBatchNode();
+        getBlendFunc();
+        setDisplayFrameWithAnimationName();
+        setTextureAtlas();
+        getSpriteFrame();
+        isDirty();
+        setAtlasIndex();
+        setDirty();
+        isTextureRectRotated();
+        getTextureRect();
+        setBlendFunc();
+        getTextureAtlas();
+        initWithSpriteFrame();
+        isFlippedX(): boolean;
+        isFlippedY(): boolean;
+        setVertexRect();
+
+        static create(fileName?:string, rect?:Rect):Sprite;
         static createWithSpriteFrameName(spriteFrameName:string):Sprite;
+        static createWithSpriteFrame(sp: SpriteFrame): Sprite;
+        static createWithTexture(texture: Texture2D) : Sprite;
     }
     //#endregion cocos2d/sprite_nodes/CCSprite.js
 
@@ -4457,7 +4514,46 @@ declare module cc {
     }
 
     class ControlButton extends Control {
+        isPushed();
+        setTitleLabelForState();
+        setAdjustBackgroundImage();
+        setZoomOnTouchDown();
+        setTitleForState();
+        setLabelAnchorPoint();
+        getLabelAnchorPoint();
+        initWithBackgroundSprite();
+        getTitleTTFSizeForState();
+        setTitleTTFForState();
+        setTitleTTFSizeForState();
+        setTitleLabel();
+        setPreferredSize();
+        getCurrentTitleColor();
+        setBackgroundSprite(sp: Scale9Sprite);
+        getBackgroundSpriteForState();
+        getHorizontalOrigin();
+        initWithTitleAndFontNameAndFontSize();
+        getCurrentTitle();
+        getScaleRatio();
+        getTitleTTFForState();
+        getBackgroundSprite();
+        getTitleColorForState();
+        setTitleColorForState();
+        doesAdjustBackgroundImage();
+        setBackgroundSpriteFrameForState(sp: SpriteFrame, state: number);
+        setBackgroundSpriteForState(sp: Sprite, state: number);
+        setScaleRatio();
+        initWithLabelAndBackgroundSprite();
+        getTitleLabel();
+        getPreferredSize();
+        getVerticalMargin();
+        getTitleLabelForState();
+        setMargins();
+        setTitleBMFontForState();
+        getTitleBMFontForState();
+        getZoomOnTouchDown();
+        getTitleForState();
 
+        static create(): ControlButton;
     }
 }
 
