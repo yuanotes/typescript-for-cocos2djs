@@ -35,6 +35,7 @@ declare module cc {
     var director: Director;
     var winSize:cc.Size;
     var view:GLView;
+
     var SCROLLVIEW_DIRECTION_NONE : number;
     var SCROLLVIEW_DIRECTION_HORIZONTAL : number;
     var SCROLLVIEW_DIRECTION_VERTICAL : number;
@@ -48,6 +49,22 @@ declare module cc {
     var CONTROL_STATE_SELECTED : number;
     var CONTROL_STATE_INITIAL : number;
 
+    var _RENDER_TYPE_CANVAS : number;
+    var _RENDER_TYPE_WEBGL : number;
+
+    var eventManager: {
+        addListener: Function;
+    };
+
+    class EventListener extends Class {
+        static UNKNOWN:number;
+        static  TOUCH_ONE_BY_ONE:number;
+        static  TOUCH_ALL_AT_ONCE:number;
+        static  KEYBOARD:number;
+        static  MOUSE:number;
+        static  ACCELERATION:number;
+        static  CUSTOM:number;
+    }
     enum ResolutionPolicy {
         // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
         // Distortion can occur, and the application may appear stretched or compressed.
@@ -133,7 +150,7 @@ declare module cc {
     class BuilderReader {
         static load(fileName:string, owner?:Object, parentSize?:Size);
     }
-    
+
 
     class BuilderAnimationManager {
         getRunningSequenceName():string;
@@ -644,7 +661,7 @@ declare module cc {
          */
         drawCardinalSpline(config:Point[], tension:number, segments:number);
 
-        // FIXME: Typescript doesn't support abstract classes so we have to put the common    
+        // FIXME: Typescript doesn't support abstract classes so we have to put the common
         // methods from DrawingPrimitiveCanvas and DrawingPrimitiveWebGL here for convenience
 
         /**
@@ -4428,7 +4445,17 @@ declare module cc {
 
         // restarts the JS VM
         function restartVM();
+
+        var capabilities: {
+            "opengl": boolean;
+            "accelerometer" : boolean;
+            "touches" : boolean;
+            "keyboard": boolean;
+            "mouse": boolean;
+        }
     }
+
+
 }
 
 declare module cc {
