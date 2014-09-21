@@ -52,19 +52,76 @@ declare module cc {
     var _RENDER_TYPE_CANVAS : number;
     var _RENDER_TYPE_WEBGL : number;
 
-    var eventManager: {
-        addListener: Function;
-    };
+    var eventManager: EventDispatcher;
 
+    class Touch {
+        getPreviousLocationInView(): Point;
+        getLocation() : Point;
+        getDelta();
+        getStartLocationInView(): Point;
+        getStartLocation(): Point;
+        getId();
+        setTouchInfo();
+        getLocationInView();
+        getPreviousLocation();
+    }
+    class EventDispatcher {
+        setEnabled(b: boolean);
+        removeAllListeners();
+        addEventListenerWithSceneGraphPriority();
+        addCustomListener();
+        addEventListenerWithFixedPriority();
+        removeListeners(node: Node);
+        resumeTarget();
+        setPriority();
+        dispatchEvent();
+        pauseTarget();
+        removeCustomListeners();
+        addListener(l: EventListener, nodeOrPriority: any);
+        removeListener(l: EventListener);
+        isEnabled() : boolean;
+    }
     class EventListener extends Class {
         static UNKNOWN:number;
-        static  TOUCH_ONE_BY_ONE:number;
-        static  TOUCH_ALL_AT_ONCE:number;
-        static  KEYBOARD:number;
-        static  MOUSE:number;
-        static  ACCELERATION:number;
-        static  CUSTOM:number;
+        static TOUCH_ONE_BY_ONE:number;
+        static TOUCH_ALL_AT_ONCE:number;
+        static KEYBOARD:number;
+        static MOUSE:number;
+        static ACCELERATION:number;
+        static CUSTOM:number;
+        static create(any):EventListener;
     }
+
+    class ClippingNode extends Node {
+        isInverted() : boolean;
+        setInverted(b: boolean);
+        setStencil(n: Node);
+        getAlphaThreshold() : number;
+        init(n: Node);
+        getStencil() : Node;
+        setAlphaThreshold(a: number);
+
+        static create(n?: Node) : ClippingNode;
+
+    }
+
+    class DrawNode extends Node {
+        drawTriangle(p1: Point,p2: Point,p3: Point,p4: Point);
+        getBlendFunc();
+        onDraw();
+        clear();
+        setBlendFunc();
+        init();
+        drawDot(point: Point, radius: number, color?:Color);
+        drawQuadBezier();
+        drawCubicBezier();
+        drawSegment(from: Point, to: Point, radius: number, color?: Color);
+        drawPoly(points: Array<Point>, fillColor: Color, borderWidth: number , borderColor?: Color);
+        drawCircle(center: Point, radius: number, angle: number, segments, drawLineToCenter: boolean, lineWidth?: number , color?:Color);
+
+        static create() : DrawNode;
+    }
+
     enum ResolutionPolicy {
         // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
         // Distortion can occur, and the application may appear stretched or compressed.
@@ -316,7 +373,140 @@ declare module cc {
 
     function pLerp(p1:Point, p2:Point, alpha:number):Point;
 
+    function pDistanceSQ(p1:Point, p2:Point) : number;
+    function pDistance(p1:Point, p2:Point): number;
+    function pNeg();
+    function pMult();
+    function pMidpoint();
+    function pDot();
+    function pCross();
+    function pPerp();
+    function pRPerp();
+    function pProject();
+    function pRotate();
+    function pNormalize();
+    function pClamp();
+    function pLengthSQ();
+    function pLength();
+
     var COCOS2D_DEBUG:number;
+
+    class ParticleSystem extends Node {
+        getStartSizeVar();
+        getTexture();
+        isFull();
+        getBatchNode();
+        getStartColor();
+        getPositionType();
+        setPosVar();
+        getEndSpin();
+        setRotatePerSecondVar();
+        getStartSpinVar();
+        getRadialAccelVar();
+        init();
+        getEndSizeVar();
+        setRotation();
+        setTangentialAccel();
+        setScaleY();
+        setScaleX();
+        getRadialAccel();
+        setStartRadius();
+        setRotatePerSecond();
+        setEndSize();
+        getGravity();
+        getTangentialAccel();
+        setEndRadius();
+        getSpeed();
+        getAngle();
+        setEndColor();
+        setStartSpin();
+        setDuration();
+        initWithTotalParticles();
+        setTexture();
+        getPosVar();
+        updateWithNoTime();
+        isBlendAdditive();
+        getSpeedVar();
+        setPositionType();
+        stopSystem();
+        getSourcePosition();
+        setLifeVar();
+        setTotalParticles();
+        setEndColorVar();
+        updateQuadWithParticle();
+        getAtlasIndex();
+        getStartSize();
+        setStartSpinVar();
+        resetSystem();
+        setAtlasIndex();
+        setTangentialAccelVar();
+        setEndRadiusVar();
+        getEndRadius();
+        isOpacityModifyRGB();
+        isActive();
+        setRadialAccelVar();
+        setStartSize();
+        setSpeed();
+        getStartSpin();
+        getRotatePerSecond();
+        initParticle();
+        setEmitterMode();
+        getDuration() : number;
+        setSourcePosition();
+        getEndSpinVar();
+        setBlendAdditive();
+        setLife();
+        setAngleVar();
+        setRotationIsDir();
+        setEndSizeVar();
+        setAngle();
+        setBatchNode();
+        getTangentialAccelVar();
+        getEmitterMode();
+        setEndSpinVar();
+        initWithFile();
+        getAngleVar();
+        setStartColor();
+        getRotatePerSecondVar();
+        getEndSize();
+        getLife();
+        setSpeedVar();
+        setAutoRemoveOnFinish();
+        setGravity();
+        postStep();
+        setEmissionRate();
+        getEndColorVar();
+        getRotationIsDir();
+        setScale();
+        getEmissionRate();
+        getEndColor();
+        getLifeVar();
+        setStartSizeVar();
+        setOpacityModifyRGB();
+        addParticle();
+        getStartRadius();
+        getParticleCount();
+        getStartRadiusVar();
+        getBlendFunc();
+        setStartColorVar();
+        setEndSpin();
+        setRadialAccel();
+        initWithDictionary();
+        isAutoRemoveOnFinish();
+        getTotalParticles();
+        setStartRadiusVar();
+        setBlendFunc();
+        getEndRadiusVar();
+        getStartColorVar();
+    }
+
+    class ParticleSystemQuad extends ParticleSystem {
+        setDisplayFrame(sp: SpriteFrame);
+        setTextureWithRect(t: Texture2D, r: Rect);
+
+        static create(dict?:any);
+        static createWithTotalParticles(n: number);
+    }
 
     //#region cocos2d/CCCommon.js
     /**
@@ -2362,7 +2552,7 @@ declare module cc {
      * @param {cc.Point} point
      * @return {Boolean}
      */
-    function rectContainsPoint(rect:Rect, point:Point);
+    function rectContainsPoint(rect:Rect, point:Point) : boolean;
 
     /**
      * @function
@@ -4191,10 +4381,6 @@ declare module cc {
     }
     //#endregion cocos2d/sprite_nodes/CCSprite.js
 
-    //#region cocos2d/touch_dispatcher/CCTouchDelegateProtocol.js
-    class Touch extends Class {
-    }
-    //#endregion cocos2d/touch_dispatcher/CCTouchDelegateProtocol.js
 
     //#region CocosDension/SimpleAudioEngine.js
     class AudioEngine extends Class {
