@@ -533,12 +533,11 @@ declare module cc {
      */
     var IS_SHOW_DEBUG_ON_PAGE:boolean;
 
-    /**
-     * Output Debug message.
-     * @function
-     * @param {String} message
-     */
-    function log(message:string);
+    function log(...any);
+    function error(...any);
+    function assert(condition: boolean, ...any);
+    function warn(...any);
+
 
     /**
      * Pop out a message box
