@@ -30094,16 +30094,20 @@ var TypeScript;
                     this.writeLineToOutput("(function(){");
                     this.writeLineToOutput("    if(_super.__ts){");
                     this.writeLineToOutput("        return function(_this){");
+                    this.writeLineToOutput("            _this.__instanceId = ClassManager.getNewInstanceId();");
                     this.writeLineToOutput("            _super.apply(_this, Array.prototype.slice.call(arguments,1));");
                     this.writeLineToOutput("        }");
                     this.writeLineToOutput("    } else if (typeof _super.prototype.ctor === \"function\") {");
                     this.writeLineToOutput("        return function(_this){");
+                    this.writeLineToOutput("            _this.__instanceId = ClassManager.getNewInstanceId();");
                     this.writeLineToOutput("            _super.prototype.ctor.apply(_this, Array.prototype.slice.call(arguments,1));");
                     this.writeLineToOutput("        }");
                     this.writeLineToOutput("    } else {");
-                    this.writeLineToOutput("        return function(){};");
+                    this.writeLineToOutput("        return function(_this){");
+                    this.writeLineToOutput("            _this.__instanceId = ClassManager.getNewInstanceId();");
+                    this.writeLineToOutput("        };");
                     this.writeLineToOutput("    }");
-                    this.writeToOutput("}())");
+                    this.writeLineToOutput("}())");
                 } else {
                     this.emitJavascript(target, false);
                 }
@@ -31756,7 +31760,7 @@ var TypeScript;
                     this.emitIndent();
                     /** Modified by yuan. **/
                     //this.writeToOutputWithSourceMapRecord("_super.apply(this, arguments)", baseTypeReference);
-                    this.writeToOutputWithSourceMapRecord("if(_super.__ts){_super.apply(this, arguments)}else if(typeof _super.prototype.ctor===\"function\"){_super.prototype.ctor.apply(this, arguments)}", baseTypeReference);
+                    this.writeToOutputWithSourceMapRecord("if(_super.__ts){_super.apply(this, arguments)}else if(typeof _super.prototype.ctor===\"function\"){_super.prototype.ctor.apply(this, arguments)};this.__instanceId = ClassManager.getNewInstanceId();", baseTypeReference);
                     /** End modified. **/
                     this.writeLineToOutput(";");
                 }
