@@ -471,7 +471,7 @@ declare module cc {
         getEndSize();
         getLife();
         setSpeedVar();
-        setAutoRemoveOnFinish();
+        setAutoRemoveOnFinish(b:boolean);
         setGravity();
         postStep();
         setEmissionRate();
