@@ -35,7 +35,123 @@ declare module cc {
     var director: Director;
     var winSize:cc.Size;
     var view:GLView;
-
+    var visibleRect : {
+        topLeft: cc.Point;
+        topRight: cc.Point;
+        top: cc.Point;
+        bottomLeft: cc.Point;
+        bottomRight: cc.Point;
+        bottom: cc.Point;
+        center: cc.Point;
+        left: cc.Point;
+        right: cc.Point;
+        width: number;
+        height: number;
+    };
+    var KEY : {
+        backspace: number;
+        tab: number;
+        enter: number;
+        shift: number; //should use shiftkey instead
+        ctrl: number; //should use ctrlkey
+        alt: number; //should use altkey
+        pause: number;
+        capslock: number;
+        escape: number;
+        pageup: number;
+        pagedown: number;
+        end: number;
+        home: number;
+        left: number;
+        up: number;
+        right: number;
+        down: number;
+        insert: number;
+        Delete: number;
+        0: number;
+        1: number;
+        2: number;
+        3: number;
+        4: number;
+        5: number;
+        6: number;
+        7: number;
+        8: number;
+        9: number;
+        a: number;
+        b: number;
+        c: number;
+        d: number;
+        e: number;
+        f: number;
+        g: number;
+        h: number;
+        i: number;
+        j: number;
+        k: number;
+        l: number;
+        m: number;
+        n: number;
+        o: number;
+        p: number;
+        q: number;
+        r: number;
+        s: number;
+        t: number;
+        u: number;
+        v: number;
+        w: number;
+        x: number;
+        y: number;
+        z: number;
+        num0: number;
+        num1: number;
+        num2: number;
+        num3: number;
+        num4: number;
+        num5: number;
+        num6: number;
+        num7: number;
+        num8: number;
+        num9: number;
+        '*': number;
+        '+': number;
+        '-': number;
+        'numdel': number;
+        '/': number;
+        f1: number; //f1-f12 dont work on ie
+        f2: number;
+        f3: number;
+        f4: number;
+        f5: number;
+        f6: number;
+        f7: number;
+        f8: number;
+        f9: number;
+        f10: number;
+        f11: number;
+        f12: number;
+        numlock: number;
+        scrolllock: number;
+        semicolon: number;
+        ',': number;
+        equal: number;
+        '=': number;
+        ';': number;
+        comma: number;
+        dash: number;
+        '.': number;
+        period: number;
+        forwardslash: number;
+        grave: number;
+        '[': number;
+        openbracket: number;
+        ']': number;
+        closebracket: number;
+        backslash: number;
+        quote: number;
+        space: number
+    }
     var SCROLLVIEW_DIRECTION_NONE : number;
     var SCROLLVIEW_DIRECTION_HORIZONTAL : number;
     var SCROLLVIEW_DIRECTION_VERTICAL : number;
@@ -54,7 +170,7 @@ declare module cc {
 
     var eventManager: EventDispatcher;
 
-    class Touch {
+    class Touch extends Class {
         getPreviousLocationInView(): Point;
         getLocation() : Point;
         getDelta();
@@ -65,6 +181,145 @@ declare module cc {
         getLocationInView();
         getPreviousLocation();
     }
+    class Event extends Class {
+        static TOUCH: number;
+        static KEYBOARD: number;
+        static ACCELERATION: number;
+        static MOUSE: number;
+        static CUSTOM: number;
+
+        constructor(type: number);
+        getType(): number;
+        stopPropagation();
+        isStopped(): boolean;
+        getCurrentTarget();
+    }
+
+    class EventCustom extends Event {
+        constructor(eventName: string);
+        getEventName(): string;
+        setUserData(data);
+        getUserData();
+    }
+
+    class EventTouch extends Event {
+        static MAX_TOUCHES: number;
+        static EventCode : {BEGAN: number; MOVED: number; ENDED: number; CANCELLED: number};
+        constructor(arr: Array<cc.Touch>);
+        /**
+         * Returns event code
+         * @returns {number}
+         */
+        getEventCode(): number;
+
+        /**
+         * Returns touches of event
+         * @returns {Array}
+         */
+        getTouches() : Array<cc.Touch>;
+    }
+
+    class EventMouse extends Event {
+        static NONE : number;
+        static DOWN : number;
+        static UP : number;
+        static MOVE : number;
+        static SCROLL : number;
+        static BUTTON_LEFT : number;
+        static BUTTON_RIGHT : number;
+        static BUTTON_MIDDLE : number;
+        static BUTTON_4 : number;
+        static BUTTON_5 : number;
+        static BUTTON_6 : number;
+        static BUTTON_7 : number;
+        static BUTTON_8 : number;
+        constructor(eventType: number);
+        /**
+         * Sets scroll data
+         * @param {number} scrollX
+         * @param {number} scrollY
+         */
+        setScrollData(scrollX:number, scrollY:number);
+        /**
+         * Returns the x axis scroll value
+         * @returns {number}
+         */
+        getScrollX():number;
+        /**
+         * Returns the y axis scroll value
+         * @returns {number}
+         */
+        getScrollY():number;
+
+        /**
+         * Sets cursor location
+         * @param {number} x
+         * @param {number} y
+         */
+        setLocation(x:number, y:number);
+        /**
+         * Returns cursor location
+         * @return {cc.Point} location
+         */
+        getLocation():cc.Point;
+
+        /**
+         * Returns the current cursor location in screen coordinates
+         * @return {cc.Point}
+         */
+        getLocationInView(): cc.Point;
+        /**
+         * Returns the delta distance from the previous location to current location
+         * @return {cc.Point}
+         */
+        getDelta(): cc.Point;
+
+        /**
+         * Returns the X axis delta distance from the previous location to current location
+         * @return {Number}
+         */
+        getDeltaX() : number;
+
+        /**
+         * Returns the Y axis delta distance from the previous location to current location
+         * @return {Number}
+         */
+        getDeltaY() : number;
+
+        /**
+         * Sets mouse button
+         * @param {number} button
+         */
+        setButton(button: number);
+
+        /**
+         * Returns mouse button
+         * @returns {number}
+         */
+        getButton(): number;
+
+        /**
+         * Returns location X axis data
+         * @returns {number}
+         */
+        getLocationX(): number;
+
+        /**
+         * Returns location Y axis data
+         * @returns {number}
+         */
+        getLocationY(): number;
+
+    }
+
+    class EventAcceleration extends Event {
+        constructor(acc);
+    }
+
+    class EventKeyboard extends Event {
+        constructor(keyCode: number, isPressed: boolean);
+    }
+
     class EventDispatcher {
         setEnabled(b: boolean);
         removeAllListeners();
@@ -89,7 +344,7 @@ declare module cc {
         static MOUSE:number;
         static ACCELERATION:number;
         static CUSTOM:number;
-        static create(any):EventListener;
+        static create(obj: Object):EventListener;
     }
 
     class ClippingNode extends Node {
@@ -103,6 +358,24 @@ declare module cc {
 
         static create(n?: Node) : ClippingNode;
 
+    }
+
+    class MotionStreak extends Node {
+        reset();
+        setTexture(t: Texture2D);
+        getTexture(): Texture2D;
+        tintWithColor(c: Color);
+        setBlendFunc(func: {src:number; dst:number});
+        setStartingPositionInitialized(b:boolean);
+        getBlendFunc(): {src:number; dst:number};
+        isStartingPositionInitialized() : boolean;
+        isFastMode(): boolean;
+        initWithFade(fade: number, minSeg: number, stroke: number, color: Color, sp:string);
+        initWithFade(fade: number, minSeg: number, stroke: number, color: Color, sp:Texture2D);
+        setFastMode(b: boolean);
+
+        static create(fade: number, minSeg: number, stroke: number, color: Color, sp:string);
+        static create(fade: number, minSeg: number, stroke: number, color: Color, sp:Texture2D);
     }
 
     class DrawNode extends Node {
@@ -376,18 +649,18 @@ declare module cc {
     function pDistanceSQ(p1:Point, p2:Point) : number;
     function pDistance(p1:Point, p2:Point): number;
     function pNeg();
-    function pMult();
-    function pMidpoint();
+    function pMult(v: Point, r: Number): Point;
+    function pMidpoint(): Point;
     function pDot();
     function pCross();
     function pPerp();
     function pRPerp();
     function pProject();
     function pRotate();
-    function pNormalize();
+    function pNormalize(p: Point): Point;
     function pClamp();
     function pLengthSQ();
-    function pLength();
+    function pLength(v: Point): number;
 
     var COCOS2D_DEBUG:number;
 
@@ -889,36 +1162,6 @@ declare module cc {
      * @extends cc.Scene
      */
     export class Loader extends Class {
-        /**
-         * Preload resources in the background
-         * @param {Array} resources
-         * @param {Function|String} selector
-         * @param {Object} target
-         * @return {cc.Loader}
-         * @example
-         * //example
-         * var g_mainmenu = [
-         *    {src:"res/hello.png"},
-         *    {src:"res/hello.plist"},
-         *
-         *    {src:"res/logo.png"},
-         *    {src:"res/btn.png"},
-         *
-         *    {src:"res/boom.mp3"},
-         * ]
-         *
-         * var g_level = [
-         *    {src:"res/level01.png"},
-         *    {src:"res/level02.png"},
-         *    {src:"res/level03.png"}
-         * ]
-         *
-         * //load a list of resources
-         * cc.Loader.preload(g_mainmenu, this.startGame, this);
-         *
-         * //load multi lists of resources
-         * cc.Loader.preload([g_mainmenu,g_level], this.startGame, this);
-         */
         static preload(resources:any[], selector:() => void, target:Node):Loader;
     }
 
@@ -928,36 +1171,6 @@ declare module cc {
      * @extends cc.Scene
      */
     export class LoaderScene extends Scene {
-        /**
-         * Preload multi scene resources.
-         * @param {Array} resources
-         * @param {Function|String} selector
-         * @param {Object} target
-         * @return {cc.LoaderScene}
-         * @example
-         * //example
-         * var g_mainmenu = [
-         *    {src:"res/hello.png"},
-         *    {src:"res/hello.plist"},
-         *
-         *    {src:"res/logo.png"},
-         *    {src:"res/btn.png"},
-         *
-         *    {src:"res/boom.mp3"},
-         * ]
-         *
-         * var g_level = [
-         *    {src:"res/level01.png"},
-         *    {src:"res/level02.png"},
-         *    {src:"res/level03.png"}
-         * ]
-         *
-         * //load a list of resources
-         * cc.LoaderScene.preload(g_mainmenu, this.startGame, this);
-         *
-         * //load multi lists of resources
-         * cc.LoaderScene.preload([g_mainmenu,g_level], this.startGame, this);
-         */
         static preload(resources:any[], selector:() => void, target:Node):LoaderScene;
     }
     //#endregion cocos2d/CCLoader.js
@@ -3909,14 +4122,14 @@ declare module cc {
      * @return {Number}
      * @function
      */
-    function RANDOM_MINUS1_1():number;
+    function randomMinus1To1(): number;
 
     /**
      * returns a random float between 0 and 1
      * @return {Number}
      * @function
      */
-    function RANDOM_0_1():number;
+    function random0To1(): number;
 
     /**
      * converts degrees to radians
@@ -3924,7 +4137,7 @@ declare module cc {
      * @return {Number}
      * @function
      */
-    function DEGREES_TO_RADIANS(angle:number);
+    function degreesToRadians(angle: number): number;
 
     /**
      * converts radians to degrees
@@ -3932,7 +4145,21 @@ declare module cc {
      * @return {Number}
      * @function
      */
-    function RADIANS_TO_DEGREES(angle:number);
+    function radiansToDegrees(angle: number): number;
+
+    /**
+     * Converts radians to a normalized vector.
+     * @param {Number} a
+     * @return {cc.Point}
+     */
+    function pForAngle(a: number): Point;
+
+    /**
+     * Converts a vector to radians.
+     * @param {cc.Point} v
+     * @return {Number}
+     */
+    function pToAngle(v: Point): number;
 
     /**
      * @constant
@@ -4059,6 +4286,17 @@ declare module cc {
     //#region cocos2d/platform/CCTypes.js
     export class Color {
         constructor(r?:number, g?:number, b?:number, a?:number);
+    }
+    export module color {
+        var WHITE: Color;
+        var YELLOW: Color;
+        var BLUE: Color;
+        var GREEN: Color;
+        var RED: Color;
+        var MAGENTA: Color;
+        var BLACK: Color;
+        var ORANGE: Color;
+        var GRAY: Color;
     }
     function color(r:any, g?:number, b?:number, a?:number): Color;
     function colorEqual(c1: Color, c2: Color): boolean;
@@ -4752,7 +4990,7 @@ declare module cc {
         setTitleColorForState();
         doesAdjustBackgroundImage();
         setBackgroundSpriteFrameForState(sp: SpriteFrame, state: number);
-        setBackgroundSpriteForState(sp: Sprite, state: number);
+        setBackgroundSpriteForState(sp: Scale9Sprite, state: number);
         setScaleRatio();
         initWithLabelAndBackgroundSprite();
         getTitleLabel();
@@ -5366,7 +5604,7 @@ declare module cp {
         gravity:any;
         iterations:any;
         damping:any;
-        staticBody:any;
+        staticBody: Body;
         idleSpeedThreshold:any;
         sleepTimeThreshold:any;
         collisionSlop: number;
@@ -5428,7 +5666,7 @@ declare module cp {
 
         setEnableContactGraph();
 
-        setGravity();
+        setGravity(g: number);
 
         setIdleSpeedThreshold();
 
@@ -5444,7 +5682,7 @@ declare module cp {
         addCollisionHandler(type1: number, type2: number, collisionBegin: Function, collisionPre: Function,
             collisionPost: Function, collisionSeparate: Function);
 
-        addStaticShape();
+        addStaticShape(shape: Shape);
 
         removeConstraint();
 
@@ -5461,98 +5699,106 @@ declare module cp {
     }
 // Body properties
     class Body {
-        a:any;
-        w:any;
-        p:any;
-        v:any;
-        i:any;
+        a: any;
+        w: number;
+        p: any;
+        v: cc.Point;
+        i: number;
         constructor(m: number, i: number);
 
-        activateStatic();
+        // only in JSB
+        //activateStatic();
+        //destroy();
+        //getAngVelLimit();
+        //getAngle();
+        getForce() : cc.Point;
+        //getMass();
+        //getMoment();
+        //getRot();
+        //getSpace();
+        //getTorque();
+        //getVelLimit();
+        //init();
+        //initStatic();
+        //setAngVelLimit();
+        setForce(vec: cc.Point);
+        //setTorque();
+        //setVelLimit();
+        //sleep();
+        //sleepWithGroup();
+        //updatePosition();
+        //updateVelocity();
+        //setUserData(data: any);
+        //getUserData(): any;
 
-        applyForce();
+        getPos(): cc.Point ;
+        getVel(): cc.Point ;
+        getAngVel() : number;
 
-        applyImpulse();
+        /// Returns true if the body is sleeping.
+        isSleeping(): boolean ;
 
-        destroy();
+        /// Returns true if the body is static.
+        isStatic(): boolean ;
 
-        getAngVel();
+        /// Returns true if the body has not been added to a space.
+        isRogue(): boolean;
 
-        getAngVelLimit();
+        // It would be nicer to use defineProperty for this, but its about 30x slower:
+        // http://jsperf.com/defineproperty-vs-setter
+        setMass(mass: number);
 
-        getAngle();
+        setMoment(moment: number);
 
-        getForce();
+        addShape(shape: cp.Shape);
 
-        getMass();
+        removeShape(shape: cp.Shape);
 
-        getMoment();
-
-        getPos();
-
-        getRot();
-
-        getSpace();
-
-        getTorque();
-
-        getVel();
-
-        getVelAtLocalPoint();
-
-        getVelAtWorldPoint();
-
-        getVelLimit();
-
-        init();
-
-        initStatic();
-
-        isRogue();
-
-        isSleeping();
-
-        isStatic();
-
-        kineticEnergy();
-
-        local2World();
-
-        resetForces();
-
-        setAngVel();
-
-        setAngVelLimit();
-
-        setAngle();
-
-        setForce();
-
-        setMass();
-
-        setMoment();
+        removeConstraint(constraint);
 
         setPos(pos: cc.Point);
 
-        setTorque();
+        setVel(velocity: cc.Point);
 
-        setVel();
+        // Angle velocity
+        setAngVel(w: number);
 
-        setVelLimit();
+        setAngleInternal(angle: number);
 
-        sleep();
+        setAngle(angle: number);
 
-        sleepWithGroup();
+        velocity_func(gravity: cc.Point, damping: number, dt: number) ;
 
-        updatePosition();
+        position_func(dt: number);
 
-        updateVelocity();
+        resetForces() ;
 
-        world2Local();
+        applyForce(force: cc.Point, r: cc.Point) ;
 
-        setUserData(data: any);
+        applyImpulse(j: cc.Point, r: cc.Point);
 
-        getUserData(): any;
+        getVelAtPoint(r: cc.Point) ;
+
+        /// Get the velocity on a body (in world units) at a point on the body in world coordinates.
+        getVelAtWorldPoint(point): cc.Point;
+
+        /// Get the velocity on a body (in world units) at a point on the body in local coordinates.
+        getVelAtLocalPoint(point): cc.Point;
+
+        eachShape(func: (shape: cp.Shape) => any);
+
+        eachConstraint(func: Function);
+
+        eachArbiter(func: Function);
+
+        /// Convert body relative/local coordinates to absolute/world coordinates.
+        local2World(v : cc.Point) : cc.Point ;
+
+        /// Convert body absolute/world coordinates to	relative/local coordinates.
+        world2Local(v: cc.Point): cc.Point;
+
+        /// Get the kinetic energy of a body.
+        kineticEnergy(): number;
     }
     class PolyShape {
 
@@ -5584,6 +5830,9 @@ declare module cp {
         setSensor(bool: boolean);
         setSurfaceVelocity();
         update();
+    }
+    class SegmentShape extends Shape {
+        constructor(body: Body, start: cc.Point, end: cc.Point, radius: number);
     }
 // Constraint properties
     class Constraint {
